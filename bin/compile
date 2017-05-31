@@ -82,6 +82,12 @@ fi
 
 cd $build_dir
 
+status "Forcing rebuild of all node_modules. Pruning all node_modules."
+rm -rf $build_dir/node_modules $cache_dir/node_modules
+
+status "Forcing re-installation of all bower_components. Pruning all bower_components."
+rm -rf $build_dir/bower_components $cache_dir/bower_components
+
 # If node_modules directory is checked into source control then
 # rebuild any native deps. Otherwise, restore from the build cache.
 if test -d $build_dir/node_modules; then
