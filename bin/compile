@@ -93,17 +93,17 @@ rm -rf $build_dir/bower_components $cache_dir/bower_components
 if test -d $build_dir/node_modules; then
   status "Found existing node_modules directory; skipping cache"
   status "Rebuilding any native dependencies"
-  npm rebuild 2>&1 | indent
+  # npm rebuild 2>&1 | indent
 elif test -d $cache_dir/node/node_modules; then
-  status "Restoring node_modules directory from cache"
-  cp -r $cache_dir/node/node_modules $build_dir/
+  # status "Restoring node_modules directory from cache"
+  # cp -r $cache_dir/node/node_modules $build_dir/
 
   status "Pruning cached dependencies not specified in package.json"
   npm prune 2>&1 | indent
 
   if test -f $cache_dir/node/.heroku/node-version && [ $(cat $cache_dir/node/.heroku/node-version) != "$node_version" ]; then
     status "Node version changed since last build; rebuilding dependencies"
-    npm rebuild 2>&1 | indent
+    # npm rebuild 2>&1 | indent
   fi
 fi
 
@@ -112,7 +112,7 @@ if test -d $build_dir/bower_components; then
   status "Found existing bower_components directory; skipping cache"
 elif test -d $cache_dir/bower_components; then
   status "Restoring bower_components directory from cache"
-  cp -r $cache_dir/bower_components $build_dir/
+  # cp -r $cache_dir/bower_components $build_dir/
 fi
 
 status "Installing bower which is required by other dependencies"
