@@ -194,7 +194,7 @@ node_modules/ember-cli/bin/ember build --environment $build_env | indent
 
 if [ "$BUGSNAG" != "" ]; then
     status "Deploying Ember CLI application $build_env distribution"
-    node_modules/ember-cli/bin/ember deploy --environment $build_env | indent
+    node_modules/ember-cli/bin/ember deploy $build_env | indent
 fi
 
 if test -f $build_dir/hooks/after_hook.sh; then
