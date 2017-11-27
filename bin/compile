@@ -104,27 +104,12 @@ elif test -d $cache_dir/node/node_modules; then
   fi
 fi
 
-status "npm cache clean"
+status "npm cache verify"
 npm cache clean
 
 if [ -d "$env_dir" ]; then
   status "Exporting config vars to environment"
   export_env_dir $env_dir
-fi
-
-if [ "$GIT_SSH_KEY" != "" ]; then
-  status "Detected SSH key for git.  launching ssh-agent and loading key"
-  echo $GIT_SSH_KEY | base64 --decode > id_rsa
-  # launch ssh-agent, we'll use it to serve our ssh key
-  # and kill it towards the end of the buildpack's run
-  eval `ssh-agent -s`
-  # We're not supporting passphrases at this time.  We could pull that in
-  # from config as well, but then we'd have to setup expect or some other
-  # terminal automation tool to feed it into ssh-add.
-  ssh-add id_rsa
-  rm id_rsa
-  # Add github to the list of known hosts - ignore the warning or else set -e will abort the deployment
-  ssh -oStrictHostKeyChecking=no -T git@github.com || true
 fi
 
 status "Installing dependencies"
@@ -152,13 +137,6 @@ cp -r $build_dir/.heroku $cache_dir/node
 status "Cleaning up node-gyp and npm artifacts"
 rm -rf "$build_dir/.node-gyp"
 rm -rf "$build_dir/.npm"
-
-if [ "$GIT_SSH_KEY" != "" ]; then
-  # Now that npm & bower have finished running, we should not need the ssh key anymore.  Kill ssh-agent
-  eval `ssh-agent -k`
-  # Clear that sensitive key data from the environment
-  export GIT_SSH_KEY=0
-fi
 
 status "Building Ember CLI application $build_env distribution"
 node_modules/ember-cli/bin/ember build --environment $build_env | indent
