@@ -64,13 +64,13 @@ http {
       deny all;
     }
 
-    #location / {
+    location / {
 
-     # expires -1;
+      expires -1;
 
-     # try_files $uri $uri/ /index.html;
+      try_files $uri $uri/ /index.html;
 
-    #}
+    }
 
   }
 
